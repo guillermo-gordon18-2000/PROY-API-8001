@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Presonas;
 use Laravel\Lumen\Routing\Controller;
 
+use Carbon\Carbon;
+
 class PersonasController extends Controller{
 
 
@@ -19,14 +21,38 @@ class PersonasController extends Controller{
   public function guardar(Request $request){
    
     $datosPersonas = new Presonas;
-      $datosPersonas->titulo = $request->titulo;
-       $datosPersonas->imagen = $request->imagen; 
+
+      if($request->hasFile('imagen')){
+
+             $nombreArchivosOriginal= $request->file('imagen')->getClientOriginalName();
+
+             $nuevoNombre=Carbon::now()->timestamp."_".$nombreArchivosOriginal;
+
+             $carpetaDestino = './upload/';
+             $request->file('imagen')->move($carpetaDestino , $nuevoNombre);
+             $datosPersonas->titulo = $request->titulo;
+             $datosPersonas->imagen = ltrim($carpetaDestino,'.').$nuevoNombre; 
                   
 
-        $datosPersonas->save();
+             $datosPersonas->save();
+     }
+  
+     
           
        #return response()->json($request->input('titulo'));
-    return response()->json($request);
+    return response()->json($nuevoNombre);
+
+  }
+
+  public function ver($id){
+                          
+
+      $datosPersonas = new Presonas;
+       $datosEncontrados =$datosPersonas->find($id);
+       return response()->json($datosEncontrados);
+
+
+
 
   }
 

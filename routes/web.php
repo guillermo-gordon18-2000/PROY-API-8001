@@ -25,3 +25,5 @@ $router->get('/', function () use ($router) {
 # $router->get('/usuarios',['uses' => 'PersonasController@ObtenerPersonas']);
    $router->get('/usuarios',['uses' => 'PersonasController@index']); 
   $router->post('/usuarios',['uses' => 'PersonasController@guardar']);
+
+  $router->get('/usuarios/{id}',['uses' => 'PersonasController@ver']);

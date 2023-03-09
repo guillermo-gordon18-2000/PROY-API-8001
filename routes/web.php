@@ -23,7 +23,9 @@ $router->get('/', function () use ($router) {
  Seguimiento de las rutas como tales debido a que no se sabe de que metodo se hase la consulta
 */
 # $router->get('/usuarios',['uses' => 'PersonasController@ObtenerPersonas']);
-   $router->get('/usuarios',['uses' => 'PersonasController@index']); 
+   $router->get('/usuarios',['uses' => 'PersonasController@index']);
   $router->post('/usuarios',['uses' => 'PersonasController@guardar']);
 
   $router->get('/usuarios/{id}',['uses' => 'PersonasController@ver']);
+
+  $router->delete('/usuarios/{id}',['uses' => 'PersonasController@eliminar']);

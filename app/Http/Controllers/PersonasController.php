@@ -7,6 +7,7 @@ use App\Models\Presonas;
 use Laravel\Lumen\Routing\Controller;
 
 use Carbon\Carbon;
+use PhpParser\Node\Stmt\Return_;
 
 class PersonasController extends Controller{
 
@@ -17,9 +18,9 @@ class PersonasController extends Controller{
      return response()->json($datosPersonas);
   }
 
-   
+
   public function guardar(Request $request){
-   
+
     $datosPersonas = new Presonas;
 
       if($request->hasFile('imagen')){
@@ -31,21 +32,21 @@ class PersonasController extends Controller{
              $carpetaDestino = './upload/';
              $request->file('imagen')->move($carpetaDestino , $nuevoNombre);
              $datosPersonas->titulo = $request->titulo;
-             $datosPersonas->imagen = ltrim($carpetaDestino,'.').$nuevoNombre; 
-                  
+             $datosPersonas->imagen = ltrim($carpetaDestino,'.').$nuevoNombre;
+
 
              $datosPersonas->save();
      }
-  
-     
-          
+
+
+
        #return response()->json($request->input('titulo'));
     return response()->json($nuevoNombre);
 
   }
 
   public function ver($id){
-                          
+
 
       $datosPersonas = new Presonas;
        $datosEncontrados =$datosPersonas->find($id);
@@ -55,6 +56,25 @@ class PersonasController extends Controller{
 
 
   }
+
+    public function eliminar($id){
+
+            $datosPersonas = Presonas::find($id);
+
+                    if($datosPersonas){
+                      $rutaArchivo = base_path('public').$datosPersonas->imagen;
+                                          if(file_exists($rutaArchivo)){
+                                                    unlink($rutaArchivo);
+                                           }
+                          $datosPersonas->delete();
+                     }
+
+
+                                  return response()->json("Registro Borrado");
+
+}
+
+
 
 
 }

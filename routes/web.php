@@ -29,3 +29,5 @@ $router->get('/', function () use ($router) {
   $router->get('/usuarios/{id}',['uses' => 'PersonasController@ver']);
 
   $router->delete('/usuarios/{id}',['uses' => 'PersonasController@eliminar']);
+ $router->post('/usuarios/{id}',['uses' => 'PersonasController@actualizar']);
+

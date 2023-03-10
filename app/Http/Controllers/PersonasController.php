@@ -72,9 +72,47 @@ class PersonasController extends Controller{
 
                                   return response()->json("Registro Borrado");
 
-}
+               }
+
+
+                  public function actualizar(Request $request,$id){
+                      $datosPersonas = Presonas::find($id);
+
+                           if($request->hasFile('imagen')){
+
+                          if($datosPersonas){
+                               $rutaArchivo=base_path('public').$datosPersonas->imagen;
+                                 if (file_exists($rutaArchivo)) {
+                                        unlink($rutaArchivo);
+
+                                 }
+
+
+                                    $datosPersonas->delete();
+
+
+                          }
+
+                                     $nombreArchivosOriginal= $request->file('imagen')->getClientOriginalName();
+                                     $nuevoNombre=Carbon::now()->timestamp."_".$nombreArchivosOriginal;
+                                     $carpetaDestino = './upload/';
+                                     $request->file('imagen')->move($carpetaDestino , $nuevoNombre);
+                                     $datosPersonas->titulo = $request->titulo;
+                                     $datosPersonas->imagen = ltrim($carpetaDestino,'.').$nuevoNombre;
+                                     $datosPersonas->save();
+                           }
 
 
 
+                         if ($request->input('titulo')) {
+                             $datosPersonas->titulo=$request->input('titulo');
+                         }
+
+
+                           $datosPersonas->save();
+
+                          return response()->json("Datos actualizado");
+
+                 }
 
 }
